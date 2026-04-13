@@ -99,3 +99,19 @@ Recommended path:
 ## Licensing note
 If you plan to use full "Alkitab Terjemahan Baru" text in production,
 make sure you have the proper license/permission from the rights holder.
+
+## Render build failed with: "Could not open requirements.txt"
+This specific error usually means Render built the **wrong commit** or wrong root settings.
+
+Use this checklist:
+1. In Render, open your service → **Manual Deploy** → choose the latest commit (not the old `Initialize repository` commit).
+2. Confirm repo root has `requirements.txt` (this repo now has it at root).
+3. In Render service **Settings**:
+   - **Root Directory** should be empty (or `.`)
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+4. Click **Save Changes** and redeploy.
+
+Also: free Render instances can sleep when inactive. The first request after idle can be slow (cold start). That is expected on free tier.
+
+This repo now includes `render.yaml` and `.python-version` to make deployment settings more explicit.
