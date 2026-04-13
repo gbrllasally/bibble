@@ -14,6 +14,26 @@ Tapi urutannya yang paling gampang:
 
 ---
 
+
+## Opsi gratis (termasuk Vercel)
+**Ya, ada yang gratis.**
+
+### 1) Render (disarankan untuk project ini)
+- Cocok untuk FastAPI/Python seperti project kamu.
+- Ada tier gratis untuk web service (dengan batasan, misalnya bisa sleep saat idle).
+- Paling mudah untuk non-programmer karena setup-nya langsung cocok dengan command Python.
+
+### 2) Vercel Hobby (gratis)
+- Bisa dipakai gratis, tapi modelnya berbasis function/serverless dan ada limit penggunaan.
+- Lebih enak untuk Next.js/frontend; untuk backend Python murni biasanya lebih sederhana pakai Render.
+- Kalau goal kamu: "langsung jalan cepat", Render biasanya lebih minim friksi.
+
+### Rekomendasi praktis
+- **Mulai dari Render dulu** sampai fitur webapp stabil.
+- Setelah itu, kalau mau, frontend bisa pindah ke Vercel dan backend tetap di Render.
+
+---
+
 ## Cara paling mudah deploy (tanpa ngoding server): pakai Render
 Render itu layanan hosting. Kamu cukup klik-klik.
 
