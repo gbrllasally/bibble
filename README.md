@@ -115,3 +115,10 @@ Use this checklist:
 Also: free Render instances can sleep when inactive. The first request after idle can be slow (cold start). That is expected on free tier.
 
 This repo now includes `render.yaml` and `.python-version` to make deployment settings more explicit.
+
+
+## Product updates
+- Added reset button in UI.
+- Chat now returns multiple verses with randomized selection so repeated prompts can return different verses.
+- Added optional long-passage mode (`include_long_passages`).
+- Replaced reading plan with generated closing prayer.

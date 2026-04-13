@@ -2,6 +2,14 @@
   {
     "reference": "Matius 11:28",
     "text": "Marilah kepada-Ku, semua yang letih lesu dan berbeban berat, Aku akan memberi kelegaan kepadamu.",
+    "tags": ["lelah", "cemas", "beban"],
+    "length": "short"
+  },
+  {
+    "reference": "Filipi 4:6-7",
+    "text": "Janganlah hendaknya kamu kuatir tentang apa pun juga, tetapi nyatakanlah dalam segala hal keinginanmu kepada Allah dalam doa dan permohonan dengan ucapan syukur. Damai sejahtera Allah, yang melampaui segala akal, akan memelihara hati dan pikiranmu dalam Kristus Yesus.",
+    "tags": ["cemas", "doa", "damai"],
+    "length": "long"
     "tags": ["lelah", "cemas", "beban"]
   },
   {
@@ -12,6 +20,32 @@
   {
     "reference": "Mazmur 34:19",
     "text": "TUHAN itu dekat kepada orang-orang yang patah hati, dan Ia menyelamatkan orang-orang yang remuk jiwanya.",
+    "tags": ["sedih", "patah_hati", "dukacita"],
+    "length": "short"
+  },
+  {
+    "reference": "Yakobus 1:5",
+    "text": "Tetapi apabila di antara kamu ada yang kekurangan hikmat, hendaklah ia memintakannya kepada Allah, yang memberikan kepada semua orang dengan murah hati dan dengan tidak membangkit-bangkit, maka hal itu akan diberikan kepadanya.",
+    "tags": ["bingung", "keputusan", "hikmat"],
+    "length": "long"
+  },
+  {
+    "reference": "Kolose 3:23",
+    "text": "Apapun juga yang kamu perbuat, perbuatlah dengan segenap hatimu seperti untuk Tuhan dan bukan untuk manusia.",
+    "tags": ["kerja", "pekerjaan", "motivasi"],
+    "length": "short"
+  },
+  {
+    "reference": "Pengkhotbah 3:13",
+    "text": "Dan bahwa setiap orang dapat makan, minum dan menikmati kesenangan dalam segala jerih payahnya, itu juga adalah pemberian Allah.",
+    "tags": ["kerja", "pekerjaan", "syukur"],
+    "length": "short"
+  },
+  {
+    "reference": "Mazmur 121:1-2",
+    "text": "Aku melayangkan mataku ke gunung-gunung; dari manakah akan datang pertolonganku? Pertolonganku ialah dari TUHAN, yang menjadikan langit dan bumi.",
+    "tags": ["cemas", "takut", "pertolongan"],
+    "length": "long"
     "tags": ["sedih", "patah_hati", "dukacita"]
   },
   {
