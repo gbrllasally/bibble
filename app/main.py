@@ -11,6 +11,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
 
 app = FastAPI(title="Alkitab Teman Hati API", version="0.3.0")
+app = FastAPI(title="Alkitab Teman Hati API", version="0.2.0")
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_PATH = BASE_DIR / "data" / "alkitab_tb_sample.json"
@@ -24,6 +25,7 @@ class ChatRequest(BaseModel):
     include_long_passages: bool = Field(
         default=False, description="Jika true, prioritaskan passage yang lebih panjang"
     )
+    message: str = Field(..., min_length=1, description="Curhat pengguna")
 
 
 class Verse(BaseModel):
@@ -35,6 +37,7 @@ class ChatResponse(BaseModel):
     reflection: str
     recommended_verses: list[Verse]
     closing_prayer: str
+    reading_plan: list[str]
     disclaimer: str
 
 
@@ -116,6 +119,26 @@ def build_closing_prayer(tags: set[str]) -> str:
         "Tuhan, terima kasih untuk penyertaan-Mu. Tolong aku menyerahkan kecemasan dan bebanku kepada-Mu, "
         "dan penuhi hatiku dengan damai sejahtera-Mu. Amin."
     )
+def retrieve_verses(tags: set[str], limit: int = 3) -> list[Verse]:
+    verses = load_verse_data()
+    scored: list[tuple[int, dict[str, Any]]] = []
+
+    for verse in verses:
+        verse_tags = set(verse.get("tags", []))
+        score = len(tags.intersection(verse_tags))
+        scored.append((score, verse))
+
+    scored.sort(key=lambda item: item[0], reverse=True)
+    selected = [item[1] for item in scored[:limit]]
+    return [Verse(reference=v["reference"], text=v["text"]) for v in selected]
+
+
+def build_reading_plan(verses: list[Verse]) -> list[str]:
+    plan = []
+    for index, verse in enumerate(verses, start=1):
+        plan.append(f"Hari {index}: Baca {verse.reference} dan tulis 3 kalimat refleksi doa.")
+    plan.append("Hari berikutnya: Ulangi ayat yang paling menyentuh dan doakan secara spesifik.")
+    return plan
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -141,6 +164,19 @@ def chat(payload: ChatRequest) -> ChatResponse:
         reflection=reflection,
         recommended_verses=verses,
         closing_prayer=prayer,
+    verses = retrieve_verses(tags)
+    reflection = (
+        "Terima kasih sudah jujur berbagi. Tuhan melihat pergumulanmu hari ini. "
+        "Mari melangkah perlahan lewat firman dan doa yang terarah."
+    )
+    disclaimer = (
+        "Layanan ini adalah pendamping refleksi rohani, bukan pengganti terapis/profesional kesehatan mental."
+    )
+    plan = build_reading_plan(verses)
+    return ChatResponse(
+        reflection=reflection,
+        recommended_verses=verses,
+        reading_plan=plan,
         disclaimer=disclaimer,
     )
 
