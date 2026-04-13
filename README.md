@@ -1,58 +1,66 @@
-# Alkitab Teman Hati (MVP)
+# Alkitab Teman Hati (Webapp + Telegram Bot)
 
-Webapp + Telegram bot berbahasa Indonesia yang merespons curhat pengguna seperti "teman refleksi rohani" (bukan pengganti terapis profesional), lalu memberi rekomendasi ayat/passage Alkitab (TB) dan rencana baca personal.
+Ini sekarang **dua channel sekaligus**:
+1. **Webapp**: UI cantik di browser (`/`) untuk curhat dan menerima ayat + rencana baca.
+2. **Telegram Bot**: endpoint webhook (`/telegram/webhook`) sudah disiapkan untuk integrasi bot.
 
-## Tujuan Produk
-- Pengguna menulis perasaan/masalah (cemas, putus asa, marah, bingung, dll).
-- Sistem melakukan klasifikasi emosi + tema rohani.
-- Sistem mengembalikan:
-  1. validasi emosi yang empatik,
-  2. 1-3 ayat/passage TB yang relevan,
-  3. refleksi singkat,
-  4. rencana baca 3-7 hari yang disesuaikan.
+Jadi, jawaban untuk pertanyaanmu: **ini bisa jadi webapp dulu, lalu Telegram ditambahkan bertahap**.
 
-## Prinsip Safety
-- Tidak mengklaim sebagai terapis berlisensi.
-- Menampilkan dislaimer dan escalation message untuk self-harm / kekerasan.
-- Menolak memberi diagnosis klinis.
-- Menyarankan bantuan profesional jika ada risiko tinggi.
+## Fitur MVP saat ini
+- Input curhat berbahasa Indonesia.
+- Respons empatik.
+- Rekomendasi 1-3 ayat berbasis tema emosi.
+- Rencana baca personal sederhana.
+- Disclaimer safety (bukan pengganti profesional kesehatan mental).
 
-## Arsitektur MVP
-- **Client**: Telegram Bot + web chat sederhana.
-- **API**: FastAPI (`/chat`, `/telegram/webhook`).
-- **NLP layer**:
-  - sentiment + emotion tagging (rule-based dulu, bisa upgrade ke LLM).
-  - retrieval ayat berbasis tag (`cemas`, `takut`, `pengampunan`, dst).
-- **Data**:
-  - indeks ayat TB (JSON/SQLite + tag tematik).
-  - log percakapan dan reading plan per user.
-- **Scheduler**: job harian untuk kirim ayat lanjutan via Telegram.
-
-## Alur Respons
-1. Terima input pengguna.
-2. Jalankan `detect_emotion` dan `detect_theme`.
-3. Ambil ayat paling relevan dari indeks TB.
-4. Bangun respons empatik + refleksi.
-5. Simpan konteks user dan update rencana baca.
-
-## Stack yang disarankan
-- Python 3.11+
-- FastAPI + Uvicorn
-- python-telegram-bot
-- SQLite/Postgres
-
-## Menjalankan MVP
+## Cara Launch Local (5 menit)
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-## Endpoint
-- `GET /health`
-- `POST /chat`
-- `POST /telegram/webhook`
+Lalu buka: `http://localhost:8000`
 
-## Catatan lisensi teks Alkitab
+## Cara Test
+```bash
+pytest -q
+```
+
+## Cara Coba API Manual
+```bash
+curl -X POST http://localhost:8000/chat \
+  -H 'Content-Type: application/json' \
+  -d '{"user_id":"u1","message":"Saya sedang cemas soal masa depan"}'
+```
+
+## Deploy Cepat (Render)
+1. Push repo ke GitHub.
+2. Buat **Web Service** di Render.
+3. Build command:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Start command:
+   ```bash
+   uvicorn app.main:app --host 0.0.0.0 --port $PORT
+   ```
+5. Setelah live, webapp ada di `/`, API ada di `/chat`.
+
+## Telegram Bot (langkah berikut)
+1. Buat bot via BotFather, dapatkan token.
+2. Set webhook Telegram ke:
+   ```
+   https://domain-kamu/telegram/webhook
+   ```
+3. Implement handler pesan Telegram untuk meneruskan text ke logic `chat`.
+
+## Struktur
+- `app/main.py` - FastAPI app + logic rekomendasi ayat.
+- `templates/index.html` - UI webapp.
+- `data/alkitab_tb_sample.json` - data ayat sample bertag tema.
+- `tests/test_app.py` - test endpoint utama.
+
+## Catatan lisensi Alkitab TB
 Pastikan Anda memiliki izin legal untuk distribusi teks "Alkitab Terjemahan Baru" dari pemegang hak terkait. Untuk development awal, gunakan data dummy/sampel terlebih dahulu.

@@ -4,12 +4,16 @@ import json
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
 
-app = FastAPI(title="Alkitab Teman Hati API", version="0.1.0")
+app = FastAPI(title="Alkitab Teman Hati API", version="0.2.0")
 
-DATA_PATH = Path(__file__).resolve().parent.parent / "data" / "alkitab_tb_sample.json"
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_PATH = BASE_DIR / "data" / "alkitab_tb_sample.json"
+TEMPLATES = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 
 class ChatRequest(BaseModel):
@@ -53,7 +57,7 @@ def detect_tags(message: str) -> set[str]:
     return tags
 
 
-def retrieve_verses(tags: set[str], limit: int = 2) -> list[Verse]:
+def retrieve_verses(tags: set[str], limit: int = 3) -> list[Verse]:
     verses = load_verse_data()
     scored: list[tuple[int, dict[str, Any]]] = []
 
@@ -73,6 +77,11 @@ def build_reading_plan(verses: list[Verse]) -> list[str]:
         plan.append(f"Hari {index}: Baca {verse.reference} dan tulis 3 kalimat refleksi doa.")
     plan.append("Hari berikutnya: Ulangi ayat yang paling menyentuh dan doakan secara spesifik.")
     return plan
+
+
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request) -> HTMLResponse:
+    return TEMPLATES.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/health")
