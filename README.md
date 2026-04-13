@@ -1,112 +1,101 @@
-# Alkitab Teman Hati (Panduan Non-Programmer)
+# Alkitab Teman Hati (Beginner-Friendly Setup Guide)
 
-Kalau kamu tidak bisa coding, tenang — anggap ini seperti:
-- **Website chat rohani** (yang bisa langsung dipakai di browser),
-- lalu nanti bisa ditambah **bot Telegram**.
+This project is a **Python/FastAPI web app** for Indonesian end users.
+Users type their feelings in Indonesian, and the app returns:
+- a short empathetic reflection,
+- suggested Bible verses,
+- a simple reading plan.
 
----
-
-## Ini webapp atau Telegram bot?
-**Keduanya bisa.**
-Tapi urutannya yang paling gampang:
-1. Jalankan dulu sebagai **webapp**.
-2. Setelah itu baru sambungkan ke **Telegram bot**.
+You can add Telegram later, but start with the web app first.
 
 ---
 
+## Is this a web app or a Telegram bot?
+It can be both, but right now:
+- ✅ **Web app is ready**
+- 🟨 Telegram webhook endpoint exists, but full bot flow is next
 
-## Opsi gratis (termasuk Vercel)
-**Ya, ada yang gratis.**
-
-### 1) Render (disarankan untuk project ini)
-- Cocok untuk FastAPI/Python seperti project kamu.
-- Ada tier gratis untuk web service (dengan batasan, misalnya bisa sleep saat idle).
-- Paling mudah untuk non-programmer karena setup-nya langsung cocok dengan command Python.
-
-### 2) Vercel Hobby (gratis)
-- Bisa dipakai gratis, tapi modelnya berbasis function/serverless dan ada limit penggunaan.
-- Lebih enak untuk Next.js/frontend; untuk backend Python murni biasanya lebih sederhana pakai Render.
-- Kalau goal kamu: "langsung jalan cepat", Render biasanya lebih minim friksi.
-
-### Rekomendasi praktis
-- **Mulai dari Render dulu** sampai fitur webapp stabil.
-- Setelah itu, kalau mau, frontend bisa pindah ke Vercel dan backend tetap di Render.
+So: deploy web app first, then connect Telegram.
 
 ---
 
-## Cara paling mudah deploy (tanpa ngoding server): pakai Render
-Render itu layanan hosting. Kamu cukup klik-klik.
+## Easiest free deployment: Render
 
-### Step 1 — Simpan project ke GitHub
-Kalau belum punya akun GitHub:
-1. Buka https://github.com dan daftar.
-2. Buat repository baru (misalnya: `alkitab-teman-hati`).
-3. Upload isi folder project ini ke repository itu.
+## 1) Put this code on GitHub
+1. Create a GitHub account.
+2. Create a new repository.
+3. Upload this project to that repository.
 
-### Step 2 — Deploy ke Render
-1. Buka https://render.com dan login (boleh pakai akun GitHub).
-2. Klik **New +** → **Web Service**.
-3. Pilih repository GitHub kamu.
-4. Isi pengaturan ini:
-   - **Environment**: `Python 3`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-5. Klik **Create Web Service**.
+## 2) Create a Render Web Service
+1. Go to [https://render.com](https://render.com) and sign in.
+2. Click **New +** (top-right).
+3. Click **Web Service**.
+4. Connect/select your GitHub repo.
+5. Render opens a **"Create Web Service"** form.
 
-Tunggu 2–5 menit sampai status jadi **Live**.
+In that form, set:
+- **Environment**: `Python 3`
+- **Build Command**: `pip install -r requirements.txt`
+- **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
 
-### Step 3 — Buka aplikasinya
-Render akan kasih link seperti:
-`https://nama-app-kamu.onrender.com`
+Then click **Create Web Service**.
 
-Buka link itu di browser. Kamu akan melihat halaman chat “Alkitab Teman Hati”.
+> If you said you cannot find Build/Start settings: they are inside the **Create Web Service** page, usually in the **Build & Deploy** section.
 
 ---
 
-## Cara test (versi non-teknis)
-Setelah website live:
-1. Buka halaman webapp.
-2. Tulis curhat singkat, contoh:
-   - “Saya cemas soal masa depan.”
-3. Klik tombol **Kirim Curhat**.
-4. Harus muncul:
-   - refleksi singkat,
-   - ayat rekomendasi,
-   - rencana baca.
-
-Kalau itu muncul, berarti aplikasi **berjalan normal**.
+## Where to find Build Command / Start Command after service is created
+If your service already exists:
+1. Open your service in Render dashboard.
+2. Click **Settings**.
+3. Find **Build & Deploy**.
+4. Edit these fields:
+   - **Build Command**
+   - **Start Command**
+5. Click **Save Changes** and redeploy.
 
 ---
 
-## Kalau kamu ingin jalankan di laptop sendiri (opsional)
-Ini versi teknis (boleh dibantu orang):
+## How to test (non-technical)
+After deploy is Live:
+1. Open your Render URL.
+2. Type: `Saya cemas soal masa depan.`
+3. Click **Kirim Curhat**.
+4. You should see reflection + verse suggestions + reading plan.
+
+If you see those, your app is working.
+
+---
+
+## Optional local run (for technical helper)
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
-Lalu buka `http://localhost:8000`.
+Open: `http://localhost:8000`
 
 ---
 
-## Telegram bot kapan?
-Setelah webapp online stabil, baru lanjut:
-1. Buat bot via **@BotFather** di Telegram.
-2. Dapat token bot.
-3. Hubungkan webhook bot ke:
-   `https://domain-kamu/telegram/webhook`
+## Vercel (free) vs Render (free)
+- **Vercel Hobby** is free, but it is more optimized for frontend/serverless workflows.
+- For this current **Python FastAPI backend**, **Render is usually simpler**.
 
-Saat ini endpoint webhook sudah ada, jadi pondasinya siap.
-
----
-
-## File penting di project ini
-- `app/main.py` → “mesin” aplikasi.
-- `templates/index.html` → tampilan web.
-- `data/alkitab_tb_sample.json` → data ayat contoh.
+Recommended path:
+1. Deploy full app on Render first.
+2. Later, if needed, host frontend elsewhere and keep backend on Render.
 
 ---
 
-## Catatan lisensi
-Untuk pakai teks penuh “Alkitab Terjemahan Baru”, pastikan izin lisensinya sesuai dari pemegang hak terkait.
+## Project files
+- `app/main.py` → backend logic + API endpoints
+- `templates/index.html` → browser UI
+- `data/alkitab_tb_sample.json` → sample verse data
+- `tests/test_app.py` → basic tests
+
+---
+
+## Licensing note
+If you plan to use full "Alkitab Terjemahan Baru" text in production,
+make sure you have the proper license/permission from the rights holder.
