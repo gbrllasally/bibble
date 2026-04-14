@@ -122,3 +122,16 @@ This repo now includes `render.yaml` and `.python-version` to make deployment se
 - Chat now returns multiple verses with randomized selection so repeated prompts can return different verses.
 - Added optional long-passage mode (`include_long_passages`).
 - Replaced reading plan with generated closing prayer.
+
+## How to provide full Bible knowledge base
+You can now import your full Bible file into a local SQLite knowledge base.
+
+1. Prepare JSON or CSV with columns/fields: `book`, `chapter`, `verse`, `text`, optional `reference`.
+2. Run importer:
+   ```bash
+   python scripts/build_bible_kb.py --input /path/to/alkitab_tb.json --format json --translation TB
+   ```
+3. This builds `kb/bible.db`.
+4. App will automatically use `kb/bible.db` for retrieval; if DB is missing, it falls back to sample JSON.
+
+See full guide: `docs/BIBLE_KB_SETUP.md`.
